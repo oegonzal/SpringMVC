@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+	<!-- This is saying - "Hey we are going to use annotations to configure our application" -->
+	<mvc:annotation-driven/>
+	
+	<!-- Uses this location information to look for files. To serve static files -->
+	<mvc:resources location="pdfs" mapping="/pdfs/**"></mvc:resources>
+	
+	<!-- This is saying - "Hey where should we start looking for annotations at?" -->
+	<context:component-scan base-package="com.spring.controller"/>
+	
+	<mvc:interceptors>
+		<!-- Intercepting the language tag put on jsp file -->
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" p:paramName="language"/>
+	</mvc:interceptors>
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" p:defaultLocale="en"/>
+	 
+	<!-- property deals with messages in messages.property file in resources directory -->
+	<bean id="messageSource" 
+		  class="org.springframework.context.support.ResourceBundleMessageSource" 
+	  	  p:basename="messages"></bean>
+
+	 
+	<!-- This says: "Hey, where are our JSP pages located at?" -->
+	<!-- Tells controller which jsp page it should display with this (in view) -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
+	 	  p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" p:order="1"/>
+
+	 	   
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/>
+
+</beans>
